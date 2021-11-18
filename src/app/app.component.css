@@ -4,3 +4,35 @@
   margin: 5% auto;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-container .btn {
+  border: none;
+  color: white;
+  padding: 15px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 10px;
+  cursor: pointer;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  text-transform: uppercase;
+}
+
+.btn-container .btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-container .btn.start {
+  background-color: #4caf50;
+}
+
+.btn-container .btn.stop {
+  background-color: #f44336;
+}

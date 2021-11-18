@@ -6,16 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  chartWidth = 800;
-  chartHeight = 260;
+  intervalTimer = null;
   chartData = [];
+  chartOptions = {
+    width: 800,
+    height: 260,
+  };
 
   ngOnInit() {
     this.generateChartData();
-
-    // setInterval(() => {
-    //   this.generateChartData();
-    // }, 5000);
   }
 
   generateChartData(): void {
@@ -36,5 +35,18 @@ export class AppComponent implements OnInit {
     }
 
     this.chartData = data;
+  }
+
+  startAutoRefresh() {
+    this.intervalTimer = setInterval(() => {
+      this.generateChartData();
+    }, 5000);
+  }
+
+  stopAutoRefresh() {
+    if (this.intervalTimer) {
+      clearInterval(this.intervalTimer);
+      this.intervalTimer = null;
+    }
   }
 }

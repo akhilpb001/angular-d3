@@ -1,7 +1,19 @@
 <div class="app-container">
-  <app-binary-line-chart
-    [width]="chartWidth"
-    [height]="chartHeight"
-    [data]="chartData"
-  ></app-binary-line-chart>
+  <app-binary-line-chart [data]="chartData" [options]="chartOptions"></app-binary-line-chart>
+</div>
+<div class="btn-container">
+  <button
+    class="btn start"
+    (click)="startAutoRefresh()"
+    [disabled]="intervalTimer ? 'disabled' : null"
+  >
+    Start Auto Refresh
+  </button>
+  <button
+    class="btn stop"
+    (click)="stopAutoRefresh()"
+    [disabled]="intervalTimer ? null : 'disabled'"
+  >
+    Stop Auto Refresh
+  </button>
 </div>

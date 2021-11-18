@@ -8,12 +8,15 @@ export interface ChartDataItem {
 
 export interface ChartOptions {
   title?: string;
+  width?: number;
+  height?: number;
   lineColor?: string;
   strokeWidth?: number;
   pointColor?: string;
   pointRadius?: number;
   tooltipBackgroundColor?: string;
   tooltipBorderColor?: string;
+  tooltipBorderRadius?: number;
   tooltipTextColor?: string;
   margins?: {
     top: number;
@@ -23,6 +26,10 @@ export interface ChartOptions {
   };
 }
 
+const DEFAULT_WIDTH = 500;
+const DEFAULT_HEIGHT = 200;
+const DEFAULT_MARGINS = { top: 30, right: 30, bottom: 100, left: 80 };
+
 @Component({
   selector: 'app-binary-line-chart',
   templateUrl: './binary-line-chart.component.html',
@@ -31,10 +38,7 @@ export interface ChartOptions {
 export class BinaryLineChartComponent implements OnInit, AfterViewInit, OnChanges {
   chartContainerId = 'binary_line_chart';
   chartData: ChartDataItem[] = [];
-  defaultMargins = { top: 30, right: 30, bottom: 100, left: 80 };
 
-  @Input() width = 500;
-  @Input() height = 200;
   @Input() data: ChartDataItem[] = [];
   @Input() options: ChartOptions = {};
 
@@ -62,9 +66,12 @@ export class BinaryLineChartComponent implements OnInit, AfterViewInit, OnChange
       return;
     }
 
-    const margins = this.options.margins || this.defaultMargins;
-    const chartWidth = this.width - margins.left - margins.right;
-    const chartHeight = this.height - margins.top - margins.bottom;
+    const width = this.options.width || DEFAULT_WIDTH;
+    const height = this.options.height || DEFAULT_HEIGHT;
+    const margins = this.options.margins || DEFAULT_MARGINS;
+
+    const chartWidth = width - margins.left - margins.right;
+    const chartHeight = height - margins.top - margins.bottom;
 
     const timeFormatter = d3.timeFormat('%d/%m/%y %I:%M %p');
     const statusFormatter = (t: number) => (t === 1 ? 'ON' : 'OFF');
@@ -130,6 +137,7 @@ export class BinaryLineChartComponent implements OnInit, AfterViewInit, OnChange
       .style('display', 'none')
       .style('background-color', `${this.options.tooltipBackgroundColor || 'lightsteelblue'}`)
       .style('border', `1px solid ${this.options.tooltipBorderColor || 'steelblue'}`)
+      .style('border-radius', `${this.options.tooltipBorderRadius || 2}px`)
       .style('color', `${this.options.tooltipTextColor || '#000'}`);
 
     svg
@@ -146,8 +154,8 @@ export class BinaryLineChartComponent implements OnInit, AfterViewInit, OnChange
         tooltip.transition().duration(200).style('display', 'block');
         tooltip
           .html(`STATUS: ${d.value === 1 ? 'ON' : 'OFF'}<br/>${timeFormatter(new Date(d.time))}`)
-          .style('left', event.pageX + 8 + 'px')
-          .style('top', `${event.pageY - 48}px`);
+          .style('left', event.pageX + 6 + 'px')
+          .style('top', `${event.pageY - 50}px`);
       })
       .on('mouseout', () => {
         tooltip.transition().duration(200).style('display', 'none');
