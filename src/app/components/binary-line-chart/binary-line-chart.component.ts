@@ -11,6 +11,7 @@ export interface ChartOptions {
   width?: number;
   height?: number;
   lineColor?: string;
+  lineFillColor?: string;
   strokeWidth?: number;
   pointColor?: string;
   pointRadius?: number;
@@ -74,7 +75,7 @@ export class BinaryLineChartComponent implements OnInit, AfterViewInit, OnChange
     const chartHeight = height - margins.top - margins.bottom;
 
     const timeFormatter = d3.timeFormat('%d/%m/%y %I:%M %p');
-    const statusFormatter = (t: number) => (t === 1 ? 'ON' : 'OFF');
+    const statusFormatter = (d: number) => (d === 1 ? 'ON' : 'OFF');
 
     const xAccessor = (d: ChartDataItem) => d.time;
     const yAccessor = (d: ChartDataItem) => d.value;
@@ -103,7 +104,7 @@ export class BinaryLineChartComponent implements OnInit, AfterViewInit, OnChange
       .append('path')
       .attr('class', 'line')
       .attr('d', lineGenerator(chartData))
-      .attr('fill', 'none')
+      .attr('fill', `${this.options.lineFillColor || 'none'}`)
       .attr('stroke', `${this.options.lineColor || 'steelblue'}`)
       .attr('stroke-width', `${this.options.strokeWidth || 2}`);
 
@@ -153,7 +154,7 @@ export class BinaryLineChartComponent implements OnInit, AfterViewInit, OnChange
       .on('mouseover', (event, d) => {
         tooltip.transition().duration(200).style('display', 'block');
         tooltip
-          .html(`STATUS: ${d.value === 1 ? 'ON' : 'OFF'}<br/>${timeFormatter(new Date(d.time))}`)
+          .html(`STATUS: ${statusFormatter(d.value)}<br/>${timeFormatter(new Date(d.time))}`)
           .style('left', event.pageX + 6 + 'px')
           .style('top', `${event.pageY - 50}px`);
       })
